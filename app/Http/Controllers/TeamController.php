@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Team;
 use Illuminate\Http\Request;
 
+use App\Http\Resources\TeamResource;
+
 class TeamController extends Controller
 {
     /**
@@ -18,7 +20,7 @@ class TeamController extends Controller
     {
         $user = $request->user();
 
-        return response()->json($user->teams()->get());
+        return response(TeamResource::collection($user->teams));
     }
 
     /**
@@ -42,7 +44,7 @@ class TeamController extends Controller
         $team = Team::create($data);
         $team->users()->attach($user->id);
 
-        return response()->json($team, 201);
+        return response()->json(new TeamResource($team), 201);
     }
 
     /**
@@ -61,7 +63,7 @@ class TeamController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
-        return response()->json($team->load(['users']));
+        return response()->json(new TeamResource($team->load(['users'])));
     }
 
     /**
@@ -89,7 +91,7 @@ class TeamController extends Controller
 
         $team->update($data);
 
-        return response()->json($team);
+        return response()->json(new TeamResource($team));
     }
 
     /**

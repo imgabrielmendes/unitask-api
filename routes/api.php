@@ -9,6 +9,8 @@ use App\Http\Controllers\TaskCommentController;
 use App\Http\Controllers\TaskAttachmentController;
 use App\Http\Controllers\MemberTeamController;
 
+
+
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Http\Request;
 
@@ -29,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
      * - PUT/PATCH /api/teams/{team}
      * - DELETE /api/teams/{team}
      */
-    Route::apiResource('teams', TeamController::class);
+    Route::apiResource('team', TeamController::class);
 
 
     Route::apiResource('member', MemberTeamController::class);
