@@ -26,6 +26,16 @@ public static function getTaskforIdUser($userId)
     return self::where('assigned_user_id', $userId)->get();
 }
 
+public static function createTask(User $user, array $data): Task
+    {
+        // Regra de negócio: Tratamento dos dados antes de salvar
+        if (empty($data['assigned_user_id'])) {
+            $data['assigned_user_id'] = $user->id;
+        }
+
+        return self::create($data);
+    }
+
     public function team()
     {
         return $this->belongsTo(Team::class);

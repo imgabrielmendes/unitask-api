@@ -22,7 +22,7 @@ class TaskService
     /**
      * Cria a tarefa com a lógica de atribuição.
      */
-    public function createTask(User $user, array $data): Task
+    public static function createTask(User $user, array $data): Task
     {
         // Regra de negócio: Tratamento dos dados antes de salvar
         $data = $this->prepareDataForCreation($data, $user);
