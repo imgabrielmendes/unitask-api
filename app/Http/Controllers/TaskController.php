@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Services\TaskService;
 use App\Http\Resources\TaskResource;
+use App\DTO\TaskDTO;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -13,6 +14,19 @@ class TaskController extends Controller
 
     public function index(Request $request): JsonResponse
     {
+
+        $dto = new TaskDTO(
+            ... $request->only([
+                'title',
+                'description',
+                'assigned_user_id',
+                
+                'team_id',
+                'status',
+                'due_date',
+            ])
+        );
+
         $tasks = Task::getTaskforIdUser(
             $request->user()->id);
         return response()->json(TaskResource::collection($tasks));
@@ -20,13 +34,10 @@ class TaskController extends Controller
 
     public static function store(Request $request): JsonResponse
     {
-        // O Request já validou os dados e checou se o usuário está no time.
-        // Agora só passamos para o serviço criar.
         $task = Task::createTask(
             $request->user(),
             $request->all()
         );
-
         return response()->json(new TaskResource($task), 201);
     }
 
