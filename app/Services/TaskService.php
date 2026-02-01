@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\Task;
 use App\Models\User;
 
+use App\Http\Resources\TaskResource;
+
 class TaskService
 {
 
@@ -15,7 +17,7 @@ class TaskService
      */
     public function taskWithStars()
     {
-        return Task::where('status', 'starred')->get();
+        return  TaskResource::collection(Task::where('status', 'starred')->get());
     }
 
     /**
@@ -26,7 +28,7 @@ class TaskService
      */
     public function taskWithComments($id)
     {
-        return Task::with('comments')->where($id)->get();
+        return TaskResource::collection(Task::with('comments')->where($id)->get());
     }
 
     /**
@@ -34,9 +36,9 @@ class TaskService
      *
      * @return void
      */
-    public function maisrecentes()
+    public function maisrecentes($userId)
     {
-        return Task::orderBy('created_at', 'desc')->get();
+        return  TaskResource::collection(Task::orderBy('created_at', 'desc')->where('assigned_user_id', $userId)->get());
     }
 
     /**
@@ -47,7 +49,7 @@ class TaskService
      */
     public function taskForTeam($teamId)
     {
-        return Task::where('team_id', $teamId)->get();
+        return  TaskResource::collection(Task::where('team_id', $teamId)->get());
     }
 
     /**

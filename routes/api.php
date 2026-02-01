@@ -9,6 +9,8 @@ use App\Http\Controllers\Task\TaskCommentController;
 use App\Http\Controllers\Task\TaskAttachmentController;
 use App\Http\Controllers\MemberTeamController;
 
+use App\Http\Controllers\HomeController;
+
 
 
 use Illuminate\Support\Facades\Broadcast;
@@ -19,7 +21,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/home', [HomeController::class, 'homePage']);
 
     /**
      * Teams
@@ -32,7 +34,6 @@ Route::middleware('auth:sanctum')->group(function () {
      * - DELETE /api/teams/{team}
      */
     Route::apiResource('team', TeamController::class);
-
 
     Route::apiResource('member', MemberTeamController::class);
 
@@ -86,6 +87,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('tasks/{task}/attachments', [TaskAttachmentController::class, 'index']);
     Route::post('tasks/{task}/attachments', [TaskAttachmentController::class, 'store']);
     Route::delete('tasks/{task}/attachments/{attachment}', [TaskAttachmentController::class, 'destroy']);
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+
 });
 
 /**
