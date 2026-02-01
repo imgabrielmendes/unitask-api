@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Task;
 
+use App\Http\Controllers\Controller;
 use App\Models\Task;
 use App\Models\TaskComment;
 use Illuminate\Http\Request;

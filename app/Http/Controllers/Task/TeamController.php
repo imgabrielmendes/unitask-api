@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Task;
 
+use App\Http\Controllers\Controller;
 use App\Models\Team;
 use Illuminate\Http\Request;
-
 use App\Http\Resources\TeamResource;
 
 class TeamController extends Controller

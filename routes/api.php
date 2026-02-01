@@ -2,11 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TaskController;
-use App\Http\Controllers\TeamController;
+use App\Http\Controllers\Task\TaskController;
+use App\Http\Controllers\Task\TeamController;
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\TaskCommentController;
-use App\Http\Controllers\TaskAttachmentController;
+use App\Http\Controllers\Task\TaskCommentController;
+use App\Http\Controllers\Task\TaskAttachmentController;
 use App\Http\Controllers\MemberTeamController;
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Task;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -10,7 +10,7 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|integer',
+            // 'id' => 'required|integer',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'team_id' => 'nullable|integer|exists:teams,id',
