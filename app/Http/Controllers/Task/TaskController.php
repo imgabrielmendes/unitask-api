@@ -34,6 +34,7 @@ class TaskController extends Controller
             $request->user(),
             $request->validated()
         );
+
         return response()->json(new TaskResource($task), 201);
     }
 

@@ -6,33 +6,48 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\TeamService;
 use App\Services\TaskService;
+use App\Http\Resources\UserResources;
 
 class HomeController extends Controller
 {
     protected TaskService $taskService;
     protected TeamService $teamService;
+    protected UserResources $userResource;
 
     public function __construct(
         TaskService $taskService, 
-        TeamService $teamService
+        TeamService $teamService,
         )
         {
             $this->taskService = $taskService;
             $this->teamService = $teamService;
         }
 
+        /**
+         * O que uma página Home precisa retornar:
+         * 1 - Tarefas mais recentes
+         * 2 - Times do usuário
+         * 3 - Notificações
+         * 4 - 
+         *
+         * @param Request $request
+         * @return JsonResponse
+         */
     public function homePage(Request $request): JsonResponse
     {
-        $user = $request->user();
 
+        $user = UserResources::make($request->user());
         $tasks = $this->taskService->maisrecentes($user->id);
         $teams = $this->teamService->teamForUser($user->id);
         $teamCount = $this->teamService->countTeamUsers($user->id);
 
         return response()->json([
-            'teams' => $teams,
-            'tasks' => $tasks,
-            'team_count' => $teamCount,
+            'data' => [
+                'user' => $user,
+                'tasks' => $tasks,
+                'teams' => $teams,
+                'team_count' => $teamCount,
+            ],
         ]);
     }
 }

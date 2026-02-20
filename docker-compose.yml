@@ -13,8 +13,38 @@ services:
       DB_DATABASE: unitask
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
+      REDIS_HOST: redis 
     volumes:
       - ./:/var/www
+    networks:
+      - laravel
+
+  redis:
+    image: redis:alpine
+    container_name: laravel_redis
+    networks:
+      - laravel
+
+  reverb:
+    build: .
+    container_name: reverb
+    command: php artisan reverb:start --host=0.0.0.0 --port=8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+      - redis
+    networks:
+      - laravel
+
+  queue-worker:
+    build: .
+    container_name: laravel_worker
+    restart: unless-stopped
+    command: php artisan queue:work
+    depends_on:
+      - app
+      - redis
     networks:
       - laravel
 
@@ -36,12 +66,12 @@ services:
     image: postgres:16-alpine
     container_name: laravel_db
     restart: unless-stopped
-    ports:
-      - "5432:5432"
     environment:
       POSTGRES_DB: unitask
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
     volumes:
       - dbdata:/var/lib/postgresql/data
     networks:
