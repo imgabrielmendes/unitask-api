@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Services\TeamService;
-use App\Services\TaskService;
+use App\Services\Task\TaskService;
 use App\Http\Resources\UserResources;
 
 class HomeController extends Controller

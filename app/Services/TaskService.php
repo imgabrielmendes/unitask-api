@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Task;
 
 use App\Models\Task;
 use App\Models\User;
@@ -9,12 +9,6 @@ use App\Http\Resources\TaskResource;
 
 class TaskService
 {
-    protected $taskResource;
-
-    public function __construct(TaskResource $taskResource)
-    {
-        $this->taskResource = $taskResource;
-    }
 
     /**
      * Tarefas com estrela
@@ -23,7 +17,7 @@ class TaskService
      */
     public function taskWithStars()
     {
-        return  $this->taskResource::collection(Task::where('status', 'starred')->get());
+        return TaskResource::collection(Task::where('status', 'starred')->get());
     }
 
     /**
@@ -34,7 +28,7 @@ class TaskService
      */
     public function taskWithComments($id)
     {
-        return $this->taskResource::collection(Task::with('comments')->where('id', $id)->get());
+        return TaskResource::collection(Task::with('comments')->where($id)->get());
     }
 
     /**
@@ -44,7 +38,7 @@ class TaskService
      */
     public function maisrecentes($userId)
     {
-        return  $this->taskResource::collection(Task::orderBy('created_at', 'desc')->where('assigned_user_id', $userId)->get());
+        return  TaskResource::collection(Task::orderBy('created_at', 'desc')->where('assigned_user_id', $userId)->get());
     }
 
     /**
@@ -55,7 +49,7 @@ class TaskService
      */
     public function taskForTeam($teamId)
     {
-        return  $this->taskResource::collection(Task::where('team_id', $teamId)->get());
+        return  TaskResource::collection(Task::where('team_id', $teamId)->get());
     }
 
     /**
