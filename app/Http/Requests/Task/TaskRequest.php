@@ -15,7 +15,7 @@ class TaskRequest extends FormRequest
             'description' => 'nullable|string',
             'team_id' => 'nullable|integer|exists:teams,id',
             'assigned_user_id' => 'nullable|integer|exists:users,id',
-            'status' => 'required|string|in:pending,in_progress,completed',
+            // 'status' => 'required|string|in:pending,in_progress,completed',
             'due_date' => 'nullable|date',
         ];
     }

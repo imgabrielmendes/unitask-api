@@ -1,31 +1,26 @@
 <?php
 
-namespace App\DTO;
+namespace App\DTO\Task;
 
-use Illuminate\Contracts\Validation\Validator;
+use App\DTO\AbstractDTO;
+use App\DTO\interfaceDTO;
+
 
 class TaskDTO extends AbstractDTO implements interfaceDTO
 {
-    public function __construct(
-        public readonly string $title,
-        public readonly ?string $description = null,
-        public readonly ?int $teamId = null,
-        public readonly ?int $assignedUserId = null,
-        public readonly string $status = 'pending',
-        public readonly ?string $dueDate = null,
-    ) {}
+    public string $title;
+    public string $description;
+    public string $status;
+    public string $due_date;
 
-
-
-    public function validator(): Validator
+    public function __construct(string $title, string $description, string $status, string $due_date)
     {
-       return validator($this->toArray(), $this->rules(), $this->messages());
+        $this->title = $title;
+        $this->description = $description;
+        $this->status = $status;
+        $this->due_date = $due_date;
     }
 
-    public function validate(): array
-    {
-       return $this->validator();
-    }
-    
-    
+
+
 }

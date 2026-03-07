@@ -4,33 +4,25 @@ namespace App\Services\Task;
 
 use App\Models\Task;
 use App\Models\User;
-use App\DTO\Task\TaskDTO;
 use App\Http\Resources\TaskResource;
-
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class TaskService
 {
-    private TaskDTO $dto;
     private Task $model;
 
-    public function __construct(TaskDTO $dto, Task $model)
+    public function __construct(Task $model)
     {
-        $this->dto = $dto;
         $this->model = $model;
     }
 
-    public function create(TaskDTO $dto): Task
+    public function create(User $user, array $data): Task
     {
-        $task = Task::create([
-                'title'       => $dto->title,
-                'description' => $dto->description,
-                'status'      => $dto->status,
-                'due_date'    => $dto->due_date
-        ]);
+        if (empty($data['assigned_user_id'])) {
+            $data['assigned_user_id'] = $user->id;
+        }
 
+        $task = Task::create($data);
         return $task;
-
     }
 
     /**
@@ -98,16 +90,5 @@ class TaskService
     public function deleteTask(Task $task): void
     {
         $task->delete();
-    }
-
-    /**
-     * Prepara os dados para criação da tarefa.
-     */
-    private function prepareDataForCreation(array $data, User $currentUser): array
-    {
-        if (empty($data['assigned_user_id'])) {
-            $data['assigned_user_id'] = $currentUser->id;
-        }
-        return $data;
     }
 }
