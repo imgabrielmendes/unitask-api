@@ -9,17 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-        /**
-         * Cria um usuário e retorna um token do Sanctum.
-         *
-         * Body:
-         * - name: string (obrigatório)
-         * - email: string (obrigatório, único)
-         * - password: string (obrigatório)
-         * - password_confirmation: string (opcional, se enviado será validado)
-         *
-         * @return \Illuminate\Http\JsonResponse
-         */
+
         public function register(Request $request)
         {
             $data = $request->validate([
@@ -53,6 +43,7 @@ class AuthController extends Controller
      */
         public function login(Request $request)
         {
+
             $request->validate([
                 'email' => 'required|email',
                 'password' => 'required',
@@ -66,10 +57,12 @@ class AuthController extends Controller
 
             $token = $user->createToken('api-token')->plainTextToken;
 
-            return response()->json([
-                'token' => $token,
-                'user' => $user,
-            ]);
+            // return response()->json([
+            //     'token' => $token,
+            //     'user' => $user,
+            // ]);
+
+            return response()->json([$token,200]);
         }
 
         /**
