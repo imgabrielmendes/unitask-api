@@ -14,16 +14,18 @@ use App\Models\Task;
 class TaskController extends Controller
 {
     private TaskService $service;
+    private TaskResource $resource;
 
-    public function __construct(TaskService $service)
+    public function __construct(TaskService $service, TaskResource $resource)
     {
         $this->service = $service;
+        $this->resource = $resource;
     }
 
     public function index(TaskRequest $request): JsonResponse
     {
         $tasks = $this->service->listUserTasks($request->user());
-        return response()->json(TaskResource::collection($tasks));
+        return response()->json($this->resource::collection($tasks));
     }
 
     public function store(TaskRequest $request): JsonResponse
@@ -33,12 +35,12 @@ class TaskController extends Controller
             $request->validated()
         );
 
-        return response()->json(new TaskResource($task), 201);
+        return response()->json($this->resource::collection($task), 201);
     }
 
     public function show(Task $task): JsonResponse
     {
-        return response()->json(new TaskResource($task));
+        return response()->json($this->resource::collection($task));
     }
 
     public function update(TaskRequest $request, Task $task): JsonResponse
@@ -47,7 +49,7 @@ class TaskController extends Controller
             $task,
             $request->validated()
         );
-        return response()->json(new TaskResource($updatedTask));
+        return response()->json($this->resource::collection($updatedTask));
     }
 
     public function destroy(Task $task): JsonResponse

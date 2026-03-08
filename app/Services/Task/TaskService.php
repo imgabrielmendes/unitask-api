@@ -6,23 +6,68 @@ use App\Models\Task;
 use App\Models\User;
 use App\Http\Resources\TaskResource;
 
+use App\DTO\Task\TaskDTO;
+use App\DTO\Task\CreateTaskDTO;
+use App\DTO\Task\UpdateTaskDTO;
+use App\DTO\Task\DeleteTaskDTO;
+
 class TaskService
 {
     private Task $model;
+    private TaskDTO $dto;
 
-    public function __construct(Task $model)
+    public function __construct(Task $model, TaskDTO $dto)
     {
         $this->model = $model;
+        $this->dto = $dto;
     }
 
-    public function create(User $user, array $data): Task
+    public function create(CreateTaskDTO $dto)
     {
-        if (empty($data['assigned_user_id'])) {
-            $data['assigned_user_id'] = $user->id;
+
+        $task = $this->model::create(
+            [
+                'title' => $dto->title,
+                'description' => $dto->description,
+                'assigned_user_id' => $dto->userId,
+                'due_date' => $dto->created_at,
+            ]
+        );
+
+        return $task;
+
+    }
+
+    /**
+     * Atualiza uma tarefa.
+     */
+    public function update(UpdateTaskDTO $dto)
+    {
+        $task = $this->model::findOrFail($dto->id);
+
+        $task->update(
+            [
+                'title' => $dto->title,
+                'description' => $dto->description,
+            ]
+        );
+
+        return $task;
+    }
+
+    /**
+     * Deleta uma tarefa.
+     */
+    public function deleteTask(DeleteTaskDTO $dto)
+    {
+        $user_permission = $this->model::where('id', $dto->id)->where('assigned_user_id', $dto->userId)->exists();
+
+        if (!$user_permission) {
+            throw new \InvalidArgumentException('User not authorized to delete this task.');
         }
 
-        $task = Task::create($data);
-        return $task;
+        $task = $this->model::findOrFail($dto->id);
+        $task->delete();
     }
 
     /**
@@ -75,20 +120,4 @@ class TaskService
         return $this->model::assignedTo($user->id)->get();
     }
 
-    /**
-     * Atualiza uma tarefa.
-     */
-    public function updateTask(Task $task, array $data): Task
-    {
-        $task->update($data);
-        return $task;
-    }
-
-    /**
-     * Deleta uma tarefa.
-     */
-    public function deleteTask(Task $task): void
-    {
-        $task->delete();
-    }
 }
