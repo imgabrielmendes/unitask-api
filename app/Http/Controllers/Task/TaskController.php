@@ -6,7 +6,7 @@ namespace App\Http\Controllers\Task;
 use App\Http\Controllers\Controller;
 
 use App\Models\Task;
-use App\Services\TaskService;
+use App\Services\Task\TaskService;
 use App\Http\Resources\TaskResource;
 use App\Http\Requests\Task\TaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
@@ -34,6 +34,7 @@ class TaskController extends Controller
             $request->user(),
             $request->validated()
         );
+
         return response()->json(new TaskResource($task), 201);
     }
 

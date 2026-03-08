@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Task;
 
 use App\Models\Task;
 use App\Models\User;
@@ -17,7 +17,7 @@ class TaskService
      */
     public function taskWithStars()
     {
-        return  TaskResource::collection(Task::where('status', 'starred')->get());
+        return TaskResource::collection(Task::where('status', 'starred')->get());
     }
 
     /**
@@ -92,7 +92,7 @@ class TaskService
     private function prepareDataForCreation(array $data, User $currentUser): array
     {
         if (empty($data['assigned_user_id'])) {
-            $data['assigned_user   _id'] = $currentUser->id;
+            $data['assigned_user_id'] = $currentUser->id;
         }
         return $data;
     }
