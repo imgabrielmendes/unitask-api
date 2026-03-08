@@ -4,33 +4,34 @@
 namespace App\Http\Controllers\Task;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 
 use App\Models\Task;
 use App\Services\Task\TaskService;
 use App\Http\Resources\TaskResource;
 use App\Http\Requests\Task\TaskRequest;
-use App\Http\Requests\UpdateTaskRequest;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
-    protected TaskService $taskService;
+    private TaskService $service;
+    private TaskResource $resource;
 
-    public function __construct(TaskService $taskService)
+    public function __construct(TaskService $service, TaskResource $resource)
     {
-        $this->taskService = $taskService;
+        $this->service = $service;
+        $this->resource = $resource;
     }
 
-    public function index(Request $request): JsonResponse
+    public function index(TaskRequest $request): JsonResponse
     {
-        $tasks = $this->taskService->listUserTasks($request->user());
-        return response()->json(TaskResource::collection($tasks));
+        $tasks = $this->service->listUserTasks($request->user());
+        return response()->json($this->resource::collection($tasks));
     }
 
     public function store(TaskRequest $request): JsonResponse
     {
-        $task = $this->taskService->createTask(
+        $task = $this->service->create(
             $request->user(),
             $request->validated()
         );
@@ -40,21 +41,22 @@ class TaskController extends Controller
 
     public function show(Task $task): JsonResponse
     {
-        return response()->json(new TaskResource($task));
+        return response()->json($this->resource::collection($task));
     }
 
-    public function update(UpdateTaskRequest $request, Task $task): JsonResponse
+    public function update(TaskRequest $request, Task $task): JsonResponse
     {
-        $updatedTask = $this->taskService->updateTask(
+        $updatedTask = $this->service->updateTask(
             $task,
             $request->validated()
         );
-        return response()->json(new TaskResource($updatedTask));
+        return response()->json($this->resource::collection($updatedTask));
     }
 
     public function destroy(Task $task): JsonResponse
     {
-        $this->taskService->deleteTask($task);
+        $this->service->deleteTask($task);
         return response()->json(null, 204);
     }
+
 }

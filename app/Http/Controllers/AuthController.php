@@ -7,19 +7,21 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
+use App\DTO\Login\LoginDTO;
+
+use App\Services\User\UserService;
+use App\Http\Resources\UserResources;
+
+use App\Http\Requests\LoginRequest;
+use Illuminate\Http\JsonResponse;
+
 class AuthController extends Controller
 {
-        /**
-         * Cria um usuário e retorna um token do Sanctum.
-         *
-         * Body:
-         * - name: string (obrigatório)
-         * - email: string (obrigatório, único)
-         * - password: string (obrigatório)
-         * - password_confirmation: string (opcional, se enviado será validado)
-         *
-         * @return \Illuminate\Http\JsonResponse
-         */
+    
+        public function __construct(
+            private UserService $userService 
+        ) {}
+
         public function register(Request $request)
         {
             $data = $request->validate([
@@ -42,33 +44,19 @@ class AuthController extends Controller
             ], 201);
         }
 
-    /**
-     * Autentica um usuário e retorna um token do Sanctum.
-     *
-     * Body:
-     * - email: string (obrigatório)
-     * - password: string (obrigatório)
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-        public function login(Request $request)
+    public function login(LoginRequest $request): JsonResponse
         {
-            $request->validate([
-                'email' => 'required|email',
-                'password' => 'required',
-            ]);
 
-            $user = User::where('email', $request->email)->first();
+            $loginDTO = new LoginDTO($request->email, $request->password);
+            $successDTO = $this->userService->authenticate($loginDTO);
 
-            if (!$user || !Hash::check($request->password, $user->password)) {
+            if (!$successDTO) {
                 return response()->json(['message' => 'Credenciais inválidas'], 401);
             }
 
-            $token = $user->createToken('api-token')->plainTextToken;
-
             return response()->json([
-                'token' => $token,
-                'user' => $user,
+                'token' => $successDTO->token,
+                'user' => new UserResources($successDTO->user),
             ]);
         }
 

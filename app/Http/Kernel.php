@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Fruitcake\Cors\HandleCors;
 
 class Kernel extends HttpKernel
 {

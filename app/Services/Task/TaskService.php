@@ -4,33 +4,70 @@ namespace App\Services\Task;
 
 use App\Models\Task;
 use App\Models\User;
-use App\DTO\Task\TaskDTO;
 use App\Http\Resources\TaskResource;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\DTO\Task\TaskDTO;
+use App\DTO\Task\CreateTaskDTO;
+use App\DTO\Task\UpdateTaskDTO;
+use App\DTO\Task\DeleteTaskDTO;
 
 class TaskService
 {
-    private TaskDTO $dto;
     private Task $model;
+    private TaskDTO $dto;
 
-    public function __construct(TaskDTO $dto, Task $model)
+    public function __construct(Task $model, TaskDTO $dto)
     {
-        $this->dto = $dto;
         $this->model = $model;
+        $this->dto = $dto;
     }
 
-    public function create(TaskDTO $dto): Task
+    public function create(CreateTaskDTO $dto)
     {
-        $task = Task::create([
-                'title'       => $dto->title,
+
+        $task = $this->model::create(
+            [
+                'title' => $dto->title,
                 'description' => $dto->description,
-                'status'      => $dto->status,
-                'due_date'    => $dto->due_date
-        ]);
+                'assigned_user_id' => $dto->userId,
+                'due_date' => $dto->created_at,
+            ]
+        );
 
         return $task;
 
+    }
+
+    /**
+     * Atualiza uma tarefa.
+     */
+    public function update(UpdateTaskDTO $dto)
+    {
+        $task = $this->model::findOrFail($dto->id);
+
+        $task->update(
+            [
+                'title' => $dto->title,
+                'description' => $dto->description,
+            ]
+        );
+
+        return $task;
+    }
+
+    /**
+     * Deleta uma tarefa.
+     */
+    public function deleteTask(DeleteTaskDTO $dto)
+    {
+        $user_permission = $this->model::where('id', $dto->id)->where('assigned_user_id', $dto->userId)->exists();
+
+        if (!$user_permission) {
+            throw new \InvalidArgumentException('User not authorized to delete this task.');
+        }
+
+        $task = $this->model::findOrFail($dto->id);
+        $task->delete();
     }
 
     /**
@@ -83,31 +120,4 @@ class TaskService
         return $this->model::assignedTo($user->id)->get();
     }
 
-    /**
-     * Atualiza uma tarefa.
-     */
-    public function updateTask(Task $task, array $data): Task
-    {
-        $task->update($data);
-        return $task;
-    }
-
-    /**
-     * Deleta uma tarefa.
-     */
-    public function deleteTask(Task $task): void
-    {
-        $task->delete();
-    }
-
-    /**
-     * Prepara os dados para criação da tarefa.
-     */
-    private function prepareDataForCreation(array $data, User $currentUser): array
-    {
-        if (empty($data['assigned_user_id'])) {
-            $data['assigned_user_id'] = $currentUser->id;
-        }
-        return $data;
-    }
 }

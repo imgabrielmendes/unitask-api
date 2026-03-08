@@ -2,6 +2,7 @@
 
 return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
+
     'allowed_methods' => ['*'],
     'allowed_origins' => ['https://unitask.ankocreative.com'],
     'allowed_origins_patterns' => [],
