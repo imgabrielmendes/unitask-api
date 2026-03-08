@@ -10,7 +10,6 @@ use App\Models\Task;
 use App\Services\Task\TaskService;
 use App\Http\Resources\TaskResource;
 use App\Http\Requests\Task\TaskRequest;
-use App\Models\Task;
 
 class TaskController extends Controller
 {
