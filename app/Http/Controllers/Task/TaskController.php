@@ -20,17 +20,6 @@ class TaskController extends Controller
         $this->service = $service;
     }
 
-    /**
-     * @OA\Get(
-     * path="/api/tasks",
-     * summary="Lista todas as tarefas",
-     * tags={"Tasks"},
-     * @OA\Response(
-     * response=200,
-     * description="Sucesso"
-     * )
-     * )
-     */
     public function index(TaskRequest $request): JsonResponse
     {
         $tasks = $this->service->listUserTasks($request->user());

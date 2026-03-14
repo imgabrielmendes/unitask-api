@@ -5,7 +5,8 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'L5 Swagger UI',
+                'title' => 'Doc | Unitask API',
+                'description' => 'Documentation for Unitask API - a task management system built with Laravel',
             ],
 
             'routes' => [

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Task;
 
 use App\Http\Controllers\Controller;
-use App\Models\Task;
-use App\Models\TaskAttachment;
+use App\Models\Task\Task;
+use App\Models\Task\TaskAttachment;
 use Illuminate\Http\Request;
 
 class TaskAttachmentController extends Controller
