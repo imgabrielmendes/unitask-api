@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Member;
 
 use Illuminate\Http\Request;
 
-use App\Models\Member;
-use App\Models\Team;
+use App\Models\Member\Member;
+use App\Models\Team\Team;
 
 class MemberTeamController extends Controller
 {

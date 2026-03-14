@@ -1,28 +1,25 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TeamResource extends JsonResource
+class UserResources extends JsonResource
 {
     /**
-     * 
+     * Transform the resource into an array.
      *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
-    
         return [
             // 'id' => $this->id,
-            'slug' => $this->slug,
             'name' => $this->name,
-            'description' => $this->description,
+            'email' => $this->email,
             // 'created_at' => $this->created_at,
             // 'updated_at' => $this->updated_at,
         ];
-    
     }
 }

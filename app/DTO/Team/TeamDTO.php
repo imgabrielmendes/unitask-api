@@ -1,6 +1,8 @@
 <?php
 
-namespace App\DTO;
+namespace App\DTO\Team;
+
+use App\DTO\AbstractDTO;
 
 class TeamDTO extends AbstractDTO
 {
@@ -8,11 +10,6 @@ class TeamDTO extends AbstractDTO
         public readonly int $id,
         public readonly string $name,
         public readonly string $city,
-        public readonly string $stadium,
-    ) 
-    {
-
-
-
-    }
+        public readonly string $stadium
+    ) {}
 }

@@ -4,7 +4,7 @@ namespace App\DTO;
 
 use Illuminate\Contracts\Validation\Validator;
 
-class interfaceDTO
+interface DTOInterface
 {
     public function rules():array;
     public function messages():array;

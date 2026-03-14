@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Project;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+use App\Models\Team\Team;
 
 class Project extends Model
 {

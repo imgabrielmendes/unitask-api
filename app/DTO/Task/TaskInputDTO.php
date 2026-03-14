@@ -1,11 +1,11 @@
 <?php
 
-namespace App\DTO;
+namespace App\DTO\Task;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Validator;
 
-class TaskInputDTO extends AbstractDTO implements interfaceDTO
+class TaskInputDTO
 {
     public function __construct(
         public readonly string $title,

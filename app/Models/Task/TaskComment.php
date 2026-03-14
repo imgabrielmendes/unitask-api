@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Task\Task;
+use App\Models\User\User;
+
 class TaskComment extends Model
 {
     use HasFactory;

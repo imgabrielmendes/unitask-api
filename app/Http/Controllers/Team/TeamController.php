@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Task;
+namespace App\Http\Controllers\Team;
 
 use App\Http\Controllers\Controller;
-use App\Models\Team;
+use App\Models\Team\Team;
 use Illuminate\Http\Request;
-use App\Http\Resources\TeamResource;
+use App\Http\Resources\Team\TeamResource;
 
 class TeamController extends Controller
-{
+{ 
     /**
      * Lista os times do usuário autenticado.
      *
@@ -104,6 +104,7 @@ class TeamController extends Controller
      */
     public function destroy(Request $request, Team $team)
     {
+        
         $user = $request->user();
 
         if (!$team->users()->whereKey($user->id)->exists()) {

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Project;
-use App\Models\Team;
+use App\Models\Project\Project;
+use App\Models\Team\Team;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller

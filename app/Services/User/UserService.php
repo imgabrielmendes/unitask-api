@@ -4,7 +4,7 @@ namespace App\Services\User;
 
 use App\DTO\Login\LoginDTO;
 use App\DTO\User\SuccessLoginDTO;
-use App\Models\User;
+use App\Models\User\User;
 use Illuminate\Support\Facades\Hash;
 
 class UserService

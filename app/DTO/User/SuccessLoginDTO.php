@@ -2,7 +2,7 @@
 
 namespace App\DTO\User;
 
-use App\Models\User;
+use App\Models\User\User;
 
 /**
  * DTO retornado após autenticação bem-sucedida.

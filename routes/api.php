@@ -3,21 +3,19 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Task\TaskController;
-use App\Http\Controllers\Task\TeamController;
+use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\Task\TaskCommentController;
 use App\Http\Controllers\Task\TaskAttachmentController;
-use App\Http\Controllers\MemberTeamController;
+use App\Http\Controllers\Member\MemberTeamController;
 
 use App\Http\Controllers\HomeController;
-
-
 
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Http\Request;
 
-Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
 Route::middleware('auth:sanctum')->group(function () {
 

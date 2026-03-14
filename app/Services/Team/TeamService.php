@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Team;
 
-use App\Models\Team;
-use App\Http\Resources\TeamResource;
+use App\Models\Team\Team;
+use App\Http\Resources\Team\TeamResource;
 
 class TeamService
 {

@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Team;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+
+use App\Models\User\User;
+use App\Models\Task\Task;
+use App\Models\Project\Project;
 
 class Team extends Model
 {

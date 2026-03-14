@@ -5,7 +5,7 @@ namespace App\DTO\Task;
 use Carbon\Carbon;
 
 // use App\DTO\AbstractDTO;
-// use App\DTO\interfaceDTO;
+// use App\DTO\DTOInterface;
 
 /**
  * DTO para Tarefas

@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 use App\DTO\Login\LoginDTO;
 
-use App\Services\User\UserService;
-use App\Http\Resources\UserResources;
+use App\Http\Requests\Login\LoginRequest;
 
-use App\Http\Requests\LoginRequest;
+use App\Services\User\UserService;
+use App\Models\User\User;
+use App\Http\Resources\User\UserResources;
+
 use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
@@ -30,11 +32,12 @@ class AuthController extends Controller
                 'password' => ['required', 'string', 'min:6', 'confirmed'],
             ]);
 
-            $user = User::create([
+            $user = new User([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
             ]);
+            $user->save();
 
             $token = $user->createToken('api-token')->plainTextToken;
 
@@ -46,8 +49,9 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request): JsonResponse
         {
+            $validated = $request->validated();
 
-            $loginDTO = new LoginDTO($request->email, $request->password);
+            $loginDTO = new LoginDTO($validated['email'], $validated['password']);
             $successDTO = $this->userService->authenticate($loginDTO);
 
             if (!$successDTO) {
