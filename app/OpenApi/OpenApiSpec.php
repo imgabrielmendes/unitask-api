@@ -10,7 +10,7 @@ use OpenApi\Attributes as OA;
     description: 'Documentation for Unitask API - a task management system built with Laravel',
 )]
 #[OA\Server(
-    url: 'http://localhost:8000',
+    url: 'https://api.unitask.ankocreative.com',
     description: 'Development server'
 )]
 #[OA\Tag(name: 'Auth', description: 'Authentication endpoints')]
