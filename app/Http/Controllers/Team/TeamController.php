@@ -39,6 +39,7 @@ class TeamController extends Controller
 
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            
         ]);
 
         $team = Team::create($data);

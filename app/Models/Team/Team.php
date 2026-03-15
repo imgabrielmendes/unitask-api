@@ -14,48 +14,48 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['name'];
 
     /**
      * Boot do modelo para gerar slug automaticamente.
      */
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($team) {
-            if (empty($team->slug)) {
-                $team->slug = Str::slug($team->name);
+    //     static::creating(function ($team) {
+    //         if (empty($team->slug)) {
+    //             $team->slug = Str::slug($team->name);
                 
-                $originalSlug = $team->slug;
-                $count = 1;
-                while (static::where('slug', $team->slug)->exists()) {
-                    $team->slug = $originalSlug . '-' . $count;
-                    $count++;
-                }
-            }
-        });
+    //             $originalSlug = $team->slug;
+    //             $count = 1;
+    //             while (static::where('slug', $team->slug)->exists()) {
+    //                 $team->slug = $originalSlug . '-' . $count;
+    //                 $count++;
+    //             }
+    //         }
+    //     });
 
-        static::updating(function ($team) {
-            if ($team->isDirty('name') && empty($team->slug)) {
-                $team->slug = Str::slug($team->name);
-                $originalSlug = $team->slug;
-                $count = 1;
-                while (static::where('slug', $team->slug)->where('id', '!=', $team->id)->exists()) {
-                    $team->slug = $originalSlug . '-' . $count;
-                    $count++;
-                }
-            }
-        });
-    }
+    //     static::updating(function ($team) {
+    //         if ($team->isDirty('name') && empty($team->slug)) {
+    //             $team->slug = Str::slug($team->name);
+    //             $originalSlug = $team->slug;
+    //             $count = 1;
+    //             while (static::where('slug', $team->slug)->where('id', '!=', $team->id)->exists()) {
+    //                 $team->slug = $originalSlug . '-' . $count;
+    //                 $count++;
+    //             }
+    //         }
+    //     });
+    // }
 
     /**
      * Configura o Laravel para usar slug nas rotas em vez de id.
      */
-    public function getRouteKeyName()
-    {
-        return 'slug';
-    }
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
 
     public function users()
     {

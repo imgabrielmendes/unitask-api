@@ -13,7 +13,7 @@ class TaskRequest extends FormRequest
             // 'id' => 'required|integer',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'team_id' => 'nullable|integer|exists:teams,id',
+            // 'team_id' => 'nullable|integer|exists:teams,id',
             'assigned_user_id' => 'nullable|integer|exists:users,id',
             // 'status' => 'required|string|in:pending,in_progress,completed',
             'due_date' => 'nullable|date',
