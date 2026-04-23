@@ -100,4 +100,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route:get('chat{key?}', function () {
+    return 'Chat endpoint';
+});
+
 Broadcast::routes();
