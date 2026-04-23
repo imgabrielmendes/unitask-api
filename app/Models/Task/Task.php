@@ -4,6 +4,7 @@ namespace App\Models\Task;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Database\Factories\TaskFactory;
 
 use App\Models\Team\Team;
 use App\Models\User\User;
@@ -22,6 +23,11 @@ class Task extends Model
         'status',
         'due_date',
     ];
+
+    protected static function newFactory()
+    {
+        return TaskFactory::new();
+    }
 
     public function team()
     {

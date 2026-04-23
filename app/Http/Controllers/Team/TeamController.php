@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Team\Team;
 use Illuminate\Http\Request;
 use App\Http\Resources\Team\TeamResource;
+use Illuminate\Support\Facades\Cache;
 
 class TeamController extends Controller
 { 
@@ -19,8 +20,13 @@ class TeamController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $cacheKey = "user:{$user->id}:teams";
 
-        return response(TeamResource::collection($user->teams));
+        $teams = Cache::store('redis')->remember($cacheKey, now()->addMinutes(10), function () use ($user) {
+            return TeamResource::collection($user->teams()->get())->resolve();
+        });
+
+        return response()->json($teams);
     }
 
     /**
@@ -44,6 +50,8 @@ class TeamController extends Controller
 
         $team = Team::create($data);
         $team->users()->attach($user->id);
+
+        Cache::store('redis')->forget("user:{$user->id}:teams");
 
         return response()->json(new TeamResource($team), 201);
     }
@@ -90,7 +98,12 @@ class TeamController extends Controller
             'name' => ['sometimes', 'required', 'string', 'max:255'],
         ]);
 
+        $teamUserIds = $team->users()->pluck('users.id')->all();
         $team->update($data);
+
+        foreach ($teamUserIds as $teamUserId) {
+            Cache::store('redis')->forget("user:{$teamUserId}:teams");
+        }
 
         return response()->json(new TeamResource($team));
     }
@@ -112,7 +125,12 @@ class TeamController extends Controller
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
+        $teamUserIds = $team->users()->pluck('users.id')->all();
         $team->delete();
+
+        foreach ($teamUserIds as $teamUserId) {
+            Cache::store('redis')->forget("user:{$teamUserId}:teams");
+        }
 
         return response()->json(null, 204);
     }

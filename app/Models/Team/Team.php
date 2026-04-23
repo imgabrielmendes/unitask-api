@@ -5,6 +5,7 @@ namespace App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Database\Factories\TeamFactory;
 
 use App\Models\User\User;
 use App\Models\Task\Task;
@@ -14,7 +15,12 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'slug'];
+
+    protected static function newFactory()
+    {
+        return TeamFactory::new();
+    }
 
     /**
      * Boot do modelo para gerar slug automaticamente.

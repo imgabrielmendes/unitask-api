@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Member\Member;
 use App\Models\Team\Team;
+use Illuminate\Support\Facades\Cache;
 
 class MemberTeamController extends Controller
 {
@@ -33,11 +34,16 @@ class MemberTeamController extends Controller
             'team_id' => ['required', 'exists:teams,id'],
         ]);
 
+        $team = Team::query()->findOrFail($data['team_id']);
+
         if (!$team->users()->whereKey($user->id)->exists()) {
             return response()->json(['message' => 'Forbidden'], 403);
         }
 
         $team->users()->attach($data['user_id']);
+
+        Cache::store('redis')->forget("user:{$user->id}:teams");
+        Cache::store('redis')->forget("user:{$data['user_id']}:teams");
 
         return response()->json(['message' => 'User added to team'], 201);
     }
@@ -60,6 +66,8 @@ class MemberTeamController extends Controller
         }
 
         $team->users()->detach($user->id);
+
+        Cache::store('redis')->forget("user:{$user->id}:teams");
 
         return response()->json(['message' => 'Removed from team'], 200);
     }

@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Team;
+use App\Models\Team\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class TeamFactory extends Factory
 {
@@ -11,8 +13,16 @@ class TeamFactory extends Factory
 
     public function definition(): array
     {
-        return [
-            'name' => $this->faker->company,
+        $name = $this->faker->unique()->company();
+
+        $attributes = [
+            'name' => $name,
         ];
+
+        if (Schema::hasColumn('teams', 'slug')) {
+            $attributes['slug'] = Str::slug($name).'-'.$this->faker->unique()->numerify('###');
+        }
+
+        return $attributes;
     }
 }

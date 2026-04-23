@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 use App\DTO\Login\LoginDTO;
 
@@ -13,7 +14,10 @@ use App\Http\Requests\Login\LoginRequest;
 
 use App\Services\User\UserService;
 use App\Models\User\User;
+use App\Models\Task\Task;
 use App\Http\Resources\User\UserResources;
+use App\Http\Resources\Team\TeamResource;
+use App\Http\Resources\Task\TaskResource;
 
 use Illuminate\Http\JsonResponse;
 
@@ -58,9 +62,25 @@ class AuthController extends Controller
                 return response()->json(['message' => 'Credenciais inválidas'], 401);
             }
 
+            $user = $successDTO->user;
+            $teamsCacheKey = "user:{$user->id}:teams";
+            $tasksCacheKey = "user:{$user->id}:tasks";
+
+            $teams = Cache::store('redis')->remember($teamsCacheKey, now()->addMinutes(10), function () use ($user) {
+                return TeamResource::collection($user->teams()->get())->resolve();
+            });
+
+            $tasks = Cache::store('redis')->remember($tasksCacheKey, now()->addMinutes(5), function () use ($user) {
+                return TaskResource::collection(
+                    Task::query()->where('assigned_user_id', $user->id)->latest()->get()
+                )->resolve();
+            });
+
             return response()->json([
                 'token' => $successDTO->token,
-                'user' => new UserResources($successDTO->user),
+                'user' => new UserResources($user),
+                'teams' => $teams,
+                'tasks' => $tasks,
             ]);
         }
 
