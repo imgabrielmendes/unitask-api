@@ -112,6 +112,8 @@ services:
 
 networks:
   laravel:
+    driver: bridge
 
 volumes:
   dbdata:
+    driver: local
